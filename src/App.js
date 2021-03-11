@@ -5,12 +5,12 @@ import React from "react";
 import { Container } from "react-bootstrap";
 
 // my components
-import ItemsList from "./components/ItemsList";
-import AddItem from "./components/AddItem";
+import ItemsListContainer from "./containers/ItemsListContainer";
+import AddItem from "./containers/AddItem";
 
 export const App = () => (
   <Container>
-    <ItemsList />
+    <ItemsListContainer />
     <AddItem />
   </Container>
 );
