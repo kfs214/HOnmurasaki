@@ -7,11 +7,11 @@ const initialItem = {
   quantity: 1,
   volume: "",
   unitPrice: "",
-  lowest: false,
 };
 
 const initialState = {
-  items: { [++latestItemNo]: initialItem },
+  lowestUnitCost: ++latestItemNo,
+  items: { [latestItemNo]: initialItem },
 };
 
 export const itemApp = (state = initialState, action) => {
@@ -19,16 +19,28 @@ export const itemApp = (state = initialState, action) => {
   console.log(state);
   switch (action.type) {
     case ADD_ITEM:
-      return { items: { ...state.items, [++latestItemNo]: initialItem } };
+      return {
+        ...state,
+        items: { ...state.items, [++latestItemNo]: initialItem },
+      };
 
     case UPDATE_ITEM:
-      let newItemList = {
+      const newItemList = {
         ...state.items,
         ...action.data,
       };
 
+      const unitCosts = Object.keys(newItemList)
+        .map((key) => newItemList[key].unitPrice)
+        .filter(
+          (unitCost) => unitCost > 0 || unitCost === 0 || unitCost === "0"
+        );
+
+      console.log(unitCosts);
+      const lowestUnitCost = Math.min(...unitCosts);
+
       return {
-        ...state,
+        lowestUnitCost,
         items: newItemList,
       };
 

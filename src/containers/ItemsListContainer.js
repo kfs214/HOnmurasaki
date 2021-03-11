@@ -3,6 +3,7 @@ import ItemsList from "../components/ItemsList";
 import { updateItem } from "../actions";
 
 const mapStateToProps = (state) => ({
+  lowestUnitCost: state.lowestUnitCost,
   items: state.items,
 });
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Jumbotron, InputGroup, FormControl, Row, Col } from "react-bootstrap";
 import funchan from "../funchan-best.png";
 
-const Item = ({ itemKey, item, updateItem }) => {
+const Item = ({ itemKey, item, lowest, updateItem }) => {
   const handleUpdateItem = (attribute, value) => {
     const newItem = {
       ...item,
@@ -58,7 +58,7 @@ const Item = ({ itemKey, item, updateItem }) => {
       </InputGroup>
 
       <Row>
-        {item.lowest ? (
+        {lowest ? (
           <Col xs={3}>
             <img style={{ height: "2em" }} src={funchan} alt="lowest" />
           </Col>
