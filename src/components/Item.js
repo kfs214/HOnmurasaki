@@ -4,11 +4,19 @@ import funchan from "../funchan-best.png";
 
 const Item = ({ itemKey, item, updateItem }) => {
   const handleUpdateItem = (attribute, value) => {
+    const newItem = {
+      ...item,
+      [attribute]: value,
+    };
+    const unitPrice = newItem.price
+      ? Math.ceil(
+          (newItem.price * 100) /
+            ((newItem.volume || 1) * (newItem.quantity || 1))
+        ) / 100
+      : "";
+    console.log(newItem.price, newItem.volume || 1, newItem.quantity || 1);
     updateItem({
-      [itemKey]: {
-        ...item,
-        [attribute]: value,
-      },
+      [itemKey]: { ...newItem, unitPrice },
     });
   };
 
