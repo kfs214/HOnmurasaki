@@ -1,25 +1,13 @@
-// constants
-import { SENT_BY } from "../constants";
-
 // action types
-export const SEND_MESSAGE = "SEND_MESSAGE";
-export const ADD_MESSAGE = "ADD_MESSAGE";
+export const ADD_ITEM = "ADD_ITEM";
+export const UPDATE_ITEM = "UPDATE_ITEM";
 
 // actions
-export const sendMessage = (message) => ({
-  type: SEND_MESSAGE,
-  messageItem: {
-    _id: new Date().getTime(),
-    sentBy: SENT_BY.ME,
-    message,
-  },
+export const addItem = () => ({
+  type: ADD_ITEM,
 });
 
-export const addMessage = (message) => ({
-  type: ADD_MESSAGE,
-  messageItem: {
-    _id: new Date().getTime(),
-    sentBy: SENT_BY.OTHERS,
-    message,
-  },
+export const updateItem = (data) => ({
+  type: UPDATE_ITEM,
+  data,
 });

@@ -1,23 +1,35 @@
-import { SEND_MESSAGE, ADD_MESSAGE } from "../actions";
+import { ADD_ITEM, UPDATE_ITEM } from "../actions";
 
-const initialState = {
-  messageList: [],
+let latestItemNo = 0;
+
+const initialItem = {
+  price: "",
+  quantity: 1,
+  volume: "",
+  unitPrice: "",
+  lowest: false,
 };
 
-export const messageApp = (state = initialState, action) => {
+const initialState = {
+  items: { [++latestItemNo]: initialItem },
+};
+
+export const itemApp = (state = initialState, action) => {
   switch (action.type) {
-    case SEND_MESSAGE:
-    case ADD_MESSAGE:
-      let newMessageList = [
-        ...state.messageList,
+    case ADD_ITEM:
+      return { ...state.items, [++latestItemNo]: initialItem };
+
+    case UPDATE_ITEM:
+      let newItemList = [
         {
-          ...action.messageItem,
+          ...action.data,
         },
+        ...state.items,
       ];
 
       return {
         ...state,
-        messageList: newMessageList,
+        items: newItemList,
       };
 
     default:
