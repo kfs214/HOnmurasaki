@@ -1,62 +1,67 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Jumbotron, InputGroup, FormControl, Row, Col } from "react-bootstrap";
 import funchan from "../funchan-best.png";
 
-const Item = ({ price, quantity, volume, unitPrice, lowest }) => (
-  <Jumbotron>
-    <InputGroup>
-      <InputGroup.Prepend>
-        <InputGroup.Text className="px-1">¥</InputGroup.Text>
-      </InputGroup.Prepend>
-      <FormControl
-        value={price}
-        type="number"
-        placeholder="価格"
-        aria-label="価格"
-      />
+const Item = ({ itemKey, item, updateItem }) => {
+  const handleUpdateItem = (attribute, value) => {
+    updateItem({
+      [itemKey]: {
+        ...item,
+        [attribute]: value,
+      },
+    });
+  };
 
-      <InputGroup.Text className="px-1">÷</InputGroup.Text>
-      <InputGroup.Text className="px-1">{"("}</InputGroup.Text>
+  return (
+    <Jumbotron>
+      <InputGroup>
+        <InputGroup.Prepend>
+          <InputGroup.Text className="px-1">¥</InputGroup.Text>
+        </InputGroup.Prepend>
+        <FormControl
+          value={item.price}
+          type="number"
+          placeholder="価格"
+          aria-label="価格"
+          onChange={(e) => handleUpdateItem("price", e.target.value)}
+        />
 
-      <FormControl
-        value={quantity}
-        type="number"
-        placeholder="量"
-        aria-label="量"
-      />
+        <InputGroup.Text className="px-1">÷</InputGroup.Text>
+        <InputGroup.Text className="px-1">{"("}</InputGroup.Text>
 
-      <InputGroup.Text className="px-1">×</InputGroup.Text>
-      <FormControl
-        value={volume}
-        type="number"
-        placeholder="数"
-        aria-label="数"
-      />
+        <FormControl
+          value={item.volume}
+          type="number"
+          placeholder="量"
+          aria-label="量"
+          onChange={(e) => handleUpdateItem("volume", e.target.value)}
+        />
 
-      <InputGroup.Text className="px-1">{")"}</InputGroup.Text>
-    </InputGroup>
+        <InputGroup.Text className="px-1">×</InputGroup.Text>
+        <FormControl
+          value={item.quantity}
+          type="number"
+          placeholder="数"
+          aria-label="数"
+          onChange={(e) => handleUpdateItem("quantity", e.target.value)}
+        />
 
-    <Row>
-      {lowest ? (
-        <Col xs={3}>
-          <img style={{ height: "2em" }} src={funchan} alt="lowest" />
-        </Col>
-      ) : (
-        ""
-      )}
-      <Col />
-      <Col xs={3}>@ {unitPrice}</Col>
-    </Row>
-  </Jumbotron>
-);
+        <InputGroup.Text className="px-1">{")"}</InputGroup.Text>
+      </InputGroup>
 
-Item.propTypes = {
-  price: PropTypes.number.isRequired,
-  quantity: PropTypes.number.isRequired,
-  volume: PropTypes.number.isRequired,
-  unitPrice: PropTypes.number.isRequired,
-  lowest: PropTypes.bool.isRequired,
+      <Row>
+        {item.lowest ? (
+          <Col xs={3}>
+            <img style={{ height: "2em" }} src={funchan} alt="lowest" />
+          </Col>
+        ) : (
+          ""
+        )}
+        <Col />
+        <Col xs={3}>@ {item.unitPrice}</Col>
+      </Row>
+    </Jumbotron>
+  );
 };
 
 export default Item;

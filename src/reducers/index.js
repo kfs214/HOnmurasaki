@@ -22,12 +22,10 @@ export const itemApp = (state = initialState, action) => {
       return { items: { ...state.items, [++latestItemNo]: initialItem } };
 
     case UPDATE_ITEM:
-      let newItemList = [
-        {
-          ...action.data,
-        },
+      let newItemList = {
         ...state.items,
-      ];
+        ...action.data,
+      };
 
       return {
         ...state,
