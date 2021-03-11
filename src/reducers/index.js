@@ -15,9 +15,11 @@ const initialState = {
 };
 
 export const itemApp = (state = initialState, action) => {
+  console.log(action);
+  console.log(state);
   switch (action.type) {
     case ADD_ITEM:
-      return { ...state.items, [++latestItemNo]: initialItem };
+      return { items: { ...state.items, [++latestItemNo]: initialItem } };
 
     case UPDATE_ITEM:
       let newItemList = [

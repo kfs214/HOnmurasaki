@@ -3,9 +3,9 @@ import { BsPlusCircleFill } from "react-icons/bs";
 import { connect } from "react-redux";
 import { addItem } from "../actions";
 
-let AddItem = () => (
+let AddItem = ({ dispatch }) => (
   <BsPlusCircleFill
-    onClick={() => addItem()}
+    onClick={() => dispatch(addItem())}
     className="float-right"
     size="3em"
   />
