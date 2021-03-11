@@ -4,30 +4,19 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// router
-import { BrowserRouter } from "react-router-dom";
-
-// redux, saga
+// redux
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import createSagaMiddleware from "redux-saga";
-import { messageApp } from "./reducers";
-import rootSaga from "./sagas";
+import { createStore } from "redux";
+import { itemApp } from "./reducers";
 
 // my components
 import { App } from "./App";
 
-const sagaMiddleware = createSagaMiddleware();
-
-const store = createStore(messageApp, applyMiddleware(sagaMiddleware));
-
-sagaMiddleware.run(rootSaga);
+const store = createStore(itemApp);
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </Provider>,
   document.getElementById("root")
 );
