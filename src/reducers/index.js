@@ -10,13 +10,11 @@ const initialItem = {
 };
 
 const initialState = {
-  lowestUnitCost: ++latestItemNo,
+  lowestUnitCost: 0,
   items: { [latestItemNo]: initialItem },
 };
 
 export const itemApp = (state = initialState, action) => {
-  console.log(action);
-  console.log(state);
   switch (action.type) {
     case ADD_ITEM:
       return {
@@ -36,7 +34,6 @@ export const itemApp = (state = initialState, action) => {
           (unitCost) => unitCost > 0 || unitCost === 0 || unitCost === "0"
         );
 
-      console.log(unitCosts);
       const lowestUnitCost = Math.min(...unitCosts);
 
       return {
