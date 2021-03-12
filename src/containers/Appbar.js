@@ -7,7 +7,7 @@ import funchan from "../funchan-best.png";
 import { APP_NAME } from "../consts";
 
 const Appbar = () => (
-  <Navbar bg="primary" variant="dark" fluid>
+  <Navbar bg="primary" variant="dark">
     <Navbar.Brand>
       <img
         alt="funchan"
