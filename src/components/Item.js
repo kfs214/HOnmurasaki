@@ -19,39 +19,32 @@ const Item = ({ itemKey, item, lowest, updateItem }) => {
     });
   };
 
+  const getFormControl = ({ key, label }) => (
+    <FormControl
+      value={item[key]}
+      type="number"
+      placeholder={label}
+      aria-label={label}
+      onChange={(e) => handleUpdateItem(key, e.target.value)}
+    />
+  );
+
   return (
     <Jumbotron>
       <InputGroup>
         <InputGroup.Prepend>
           <InputGroup.Text className="px-1">¥</InputGroup.Text>
         </InputGroup.Prepend>
-        <FormControl
-          value={item.price}
-          type="number"
-          placeholder="価格"
-          aria-label="価格"
-          onChange={(e) => handleUpdateItem("price", e.target.value)}
-        />
+
+        {getFormControl({ key: "price", label: "価格" })}
 
         <InputGroup.Text className="px-1">÷</InputGroup.Text>
         <InputGroup.Text className="px-1">{"("}</InputGroup.Text>
 
-        <FormControl
-          value={item.volume}
-          type="number"
-          placeholder="量"
-          aria-label="量"
-          onChange={(e) => handleUpdateItem("volume", e.target.value)}
-        />
+        {getFormControl({ key: "volume", label: "量" })}
 
         <InputGroup.Text className="px-1">×</InputGroup.Text>
-        <FormControl
-          value={item.quantity}
-          type="number"
-          placeholder="数"
-          aria-label="数"
-          onChange={(e) => handleUpdateItem("quantity", e.target.value)}
-        />
+        {getFormControl({ key: "quantity", label: "数" })}
 
         <InputGroup.Text className="px-1">{")"}</InputGroup.Text>
       </InputGroup>
