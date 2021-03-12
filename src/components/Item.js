@@ -14,7 +14,6 @@ const Item = ({ itemKey, item, lowest, updateItem }) => {
             ((newItem.volume || 1) * (newItem.quantity || 1))
         ) / 100
       : "";
-    console.log(newItem.price, newItem.volume || 1, newItem.quantity || 1);
     updateItem({
       [itemKey]: { ...newItem, unitPrice },
     });
