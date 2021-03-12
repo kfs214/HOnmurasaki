@@ -8,6 +8,7 @@ let AddItem = ({ dispatch }) => (
     onClick={() => dispatch(addItem())}
     className="float-right"
     size="3em"
+    color={"#65318e"}
   />
 );
 
