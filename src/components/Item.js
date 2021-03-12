@@ -20,8 +20,20 @@ const Item = ({ itemKey, item, lowest, updateItem }) => {
     });
   };
 
+  const shadow = lowest ? "shadow" : "";
+
+  const unitPriceColor = lowest ? "text-primary" : "text-muted";
+
+  const funchanComponent = lowest ? (
+    <Col xs={3}>
+      <img style={{ height: "2em" }} src={funchan} alt="lowest" />
+    </Col>
+  ) : (
+    ""
+  );
+
   return (
-    <Jumbotron>
+    <Jumbotron className={shadow} color="primary">
       <InputGroup>
         <InputGroup.Prepend>
           <InputGroup.Text className="px-1">¥</InputGroup.Text>
@@ -58,15 +70,8 @@ const Item = ({ itemKey, item, lowest, updateItem }) => {
       </InputGroup>
 
       <Row>
-        {lowest ? (
-          <Col xs={3}>
-            <img style={{ height: "2em" }} src={funchan} alt="lowest" />
-          </Col>
-        ) : (
-          ""
-        )}
-        <Col />
-        <Col xs={3}>@ {item.unitPrice}</Col>
+        {funchanComponent}
+        <Col className={["text-right", unitPriceColor]}>@ {item.unitPrice}</Col>
       </Row>
     </Jumbotron>
   );

@@ -1,6 +1,11 @@
+// react/redux
 import React from "react";
-import { BsPlusCircleFill } from "react-icons/bs";
 import { connect } from "react-redux";
+
+// styles
+import { BsPlusCircleFill } from "react-icons/bs";
+
+// my components
 import { addItem } from "../actions";
 
 let AddItem = ({ dispatch }) => (
@@ -8,6 +13,7 @@ let AddItem = ({ dispatch }) => (
     onClick={() => dispatch(addItem())}
     className="float-right"
     size="3em"
+    color={"#65318e"}
   />
 );
 
