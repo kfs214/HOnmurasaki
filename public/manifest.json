@@ -1,6 +1,6 @@
 {
-  "short_name": "AWS",
-  "name": "Ayanami Wryyyyy Service",
+  "short_name": "HO",
+  "name": "HOnmurasaki",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +8,18 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "funchan-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "funchan-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#65318e",
+  "background_color": "#b759ff"
 }
