@@ -65,8 +65,7 @@ const Item = ({ itemKey, item, lowest, updateItem }) => {
         ) : (
           ""
         )}
-        <Col />
-        <Col xs={3}>@ {item.unitPrice}</Col>
+        <Col className="text-right">@ {item.unitPrice}</Col>
       </Row>
     </Jumbotron>
   );
