@@ -16,7 +16,13 @@ function formatNumberWithoutRounding(value: number | null): string {
   return value.toLocaleString(); // Apply thousand separators directly
 }
 
-export function InputRow({ data, isCheapest, onUpdate, onLastInputKeyPress, inputRef }: InputRowProps) {
+export function InputRow({
+  data,
+  isCheapest,
+  onUpdate,
+  onLastInputKeyPress,
+  inputRef,
+}: InputRowProps) {
   const handleInputChange = (key: keyof RowData, value: string) => {
     // Remove non-numeric characters and parse the value
     const numericValue = value.replace(/[^0-9.]/g, ''); // Remove non-numeric characters
@@ -52,9 +58,25 @@ export function InputRow({ data, isCheapest, onUpdate, onLastInputKeyPress, inpu
   };
 
   return (
-    <View className="mb-2 flex-row items-center">
+    <View className="mb-2 flex-row items-center" testID="input-row">
       {/* Cheapest Row Indicator */}
-      <View className="w-6">{isCheapest && <Text className="text-center">⭐</Text>}</View>
+      <View className="relative w-6">
+        {isCheapest && (
+          <>
+            <Text className="text-center" accessibilityLabel="Cheapest" aria-label="Cheapest">
+              ⭐
+            </Text>
+            {/* Visually hidden text for screen readers, Tailwind style */}
+            <Text
+              className="sr-only"
+              accessible
+              accessibilityElementsHidden={false}
+              importantForAccessibility="yes">
+              Cheapest
+            </Text>
+          </>
+        )}
+      </View>
 
       {/* Price Input */}
       <View className="flex-1 flex-row items-center border border-gray-300 p-2">
@@ -63,6 +85,8 @@ export function InputRow({ data, isCheapest, onUpdate, onLastInputKeyPress, inpu
           className="min-w-0 flex-1 text-center"
           keyboardType="numeric"
           placeholder="Price"
+          accessibilityLabel="Price"
+          aria-label="Price"
           value={formatNumberWithoutRounding(data.price)} // Format the value for display
           onChangeText={(text) => handleInputChange('price', text.replace(/,/g, ''))} // Remove commas before processing
           onKeyPress={(event) => handleKeyPress(event, false)} // Pass isLastInput as false
@@ -79,6 +103,8 @@ export function InputRow({ data, isCheapest, onUpdate, onLastInputKeyPress, inpu
           className="min-w-0 flex-1 text-center"
           keyboardType="numeric"
           placeholder="Quantity"
+          accessibilityLabel="Quantity"
+          aria-label="Quantity"
           value={formatNumberWithoutRounding(data.quantity)} // Format the value for display
           onChangeText={(text) => handleInputChange('quantity', text.replace(/,/g, ''))} // Remove commas before processing
           onKeyPress={(event) => handleKeyPress(event, false)} // Pass isLastInput as false
@@ -94,6 +120,8 @@ export function InputRow({ data, isCheapest, onUpdate, onLastInputKeyPress, inpu
           className="min-w-0 flex-1 text-center"
           keyboardType="numeric"
           placeholder="1" // Placeholder "1"
+          accessibilityLabel="Count"
+          aria-label="Count"
           value={formatNumberWithoutRounding(data.count)} // Format the value for display
           onChangeText={(text) => handleInputChange('count', text.replace(/,/g, ''))} // Remove commas before processing
           onKeyPress={(event) => handleKeyPress(event, true)} // Pass isLastInput as true

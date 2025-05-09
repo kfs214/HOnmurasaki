@@ -95,7 +95,7 @@ export function ScreenContent() {
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
-      <Button title="Add Row" onPress={addRow} />
+      <Button title="Add Row" onPress={addRow} accessibilityLabel="Add Row" aria-label="Add Row" />
     </View>
   );
 }
