@@ -65,21 +65,60 @@ test.describe('Row Management and Calculations', () => {
   test('should highlight the row with the minimum unit price', async ({ page }) => {
     await page.goto('/');
     const priceInputs = page.getByRole('textbox', { name: 'Price' });
+    const quantityInputs = page.getByRole('textbox', { name: 'Quantity' });
     const inputRows = page.getByTestId('input-row');
 
+    // Row 1: 100 / 5 = 20
     await priceInputs.nth(0).fill('100');
+    await quantityInputs.nth(0).fill('5');
+
+    // Row 2: 50 / 2 = 25
     await priceInputs.nth(1).fill('50');
+    await quantityInputs.nth(1).fill('2');
+
     const starIconRow1 = inputRows.nth(0).getByText('⭐');
     const starIconRow2 = inputRows.nth(1).getByText('⭐');
-    await expect(starIconRow2).toBeVisible();
-    await expect(starIconRow1).toHaveCount(0);
 
-    await priceInputs.nth(0).fill('30');
     await expect(starIconRow1).toBeVisible();
     await expect(starIconRow2).toHaveCount(0);
 
+    // Now make row 2 the cheapest: 30 / 2 = 15
+    await priceInputs.nth(1).fill('30');
+    await expect(starIconRow2).toBeVisible();
+    await expect(starIconRow1).toHaveCount(0);
+
     const allStarIcons = page.getByText('⭐');
     await expect(allStarIcons).toHaveCount(1);
+  });
+
+  test('should show indicators for all rows with the minimum unit price', async ({ page }) => {
+    await page.goto('/');
+    const priceInputs = page.getByRole('textbox', { name: 'Price' });
+    const quantityInputs = page.getByRole('textbox', { name: 'Quantity' });
+    const inputRows = page.getByTestId('input-row');
+
+    // Row 1: 100 / 5 = 20 (should get indicator)
+    await priceInputs.nth(0).fill('100');
+    await quantityInputs.nth(0).fill('5');
+
+    // Row 2: 40 / 2 = 20 (same unit price, should also get indicator)
+    await priceInputs.nth(1).fill('40');
+    await quantityInputs.nth(1).fill('2');
+
+    // Row 3: 60 / 2 = 30 (higher unit price, should NOT get indicator)
+    await page.click('text=Add Row');
+    await priceInputs.nth(2).fill('60');
+    await quantityInputs.nth(2).fill('2');
+
+    const starIconRow1 = inputRows.nth(0).getByText('⭐');
+    const starIconRow2 = inputRows.nth(1).getByText('⭐');
+    const starIconRow3 = inputRows.nth(2).getByText('⭐');
+    const allStarIcons = page.getByText('⭐');
+
+    await expect(starIconRow1).toBeVisible();
+    await expect(starIconRow2).toBeVisible();
+    await expect(starIconRow3).toHaveCount(0);
+    await expect(allStarIcons).toHaveCount(2);
   });
 
   test('should scroll to the last row when a new row is added', async ({ page }) => {

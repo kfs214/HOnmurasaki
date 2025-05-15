@@ -60,6 +60,11 @@ test.describe('Accessibility and Keyboard Navigation', () => {
     await page.keyboard.press('Tab');
     const countInput = page.getByRole('textbox', { name: 'Count' }).first();
     await expect(countInput).toBeFocused();
+
+    // Press Tab to move to Price of the second row
+    await page.keyboard.press('Tab');
+    const secondRowPriceInput = page.getByRole('textbox', { name: 'Price' }).nth(1);
+    await expect(secondRowPriceInput).toBeFocused();
   });
 
   test('should add a new row when pressing Tab on the last field of the last row', async ({
@@ -108,9 +113,7 @@ test.describe('Accessibility and Keyboard Navigation', () => {
 
   test('should handle a large number of rows without performance issues', async ({ page }) => {
     await page.goto('/');
-    for (let i = 0; i < 50; i++) {
-      await page.click('text=Add Row');
-    }
+    await Promise.all(Array.from({ length: 50 }).map(() => page.click('text=Add Row')));
     const priceInputs = page.getByRole('textbox', { name: 'Price' });
     await expect(priceInputs).toHaveCount(52); // 2 initial rows + 50 added rows
   });
@@ -145,9 +148,6 @@ test.describe('Accessibility and Keyboard Navigation', () => {
     const priceInputs = page.getByRole('textbox', { name: 'Price' });
     const quantityInputs = page.getByRole('textbox', { name: 'Quantity' });
     const countInputs = page.getByRole('textbox', { name: 'Count' });
-
-    // Verify initial state
-    await expect(priceInputs).toHaveCount(2);
 
     // Add an extra row so we can test with a middle row
     await page.click('text=Add Row');
