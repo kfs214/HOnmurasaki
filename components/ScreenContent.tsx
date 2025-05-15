@@ -24,8 +24,8 @@ export function ScreenContent() {
     });
 
     setTimeout(() => {
-      flatListRef.current?.scrollToEnd(); // Scroll to the new row
-      inputRefs.current[rows.length]?.focus(); // Focus on the Price input of the new row
+      flatListRef.current?.scrollToEnd();
+      inputRefs.current[rows.length]?.focus();
     }, 100);
   }
 
@@ -40,13 +40,6 @@ export function ScreenContent() {
   function updateRow(id: string, updatedRow: Partial<RowData>) {
     const updatedRows = rows.map((row) => (row.id === id ? { ...row, ...updatedRow } : row));
     setRows(updatedRows);
-
-    // Calculate the minimum unit price
-    // Note: We recalculate the unit price for all rows each time a row is updated.
-    // This approach was chosen after careful consideration:
-    // - The unit price calculation is lightweight and does not significantly impact performance.
-    // - Keeping the logic simple avoids the complexity of managing cached values or memoization.
-    // - This ensures that the calculations are always up-to-date and consistent.
     const unitPrices = updatedRows
       .map(calculateUnitPrice)
       .filter((price): price is number => price !== null);
@@ -59,7 +52,6 @@ export function ScreenContent() {
     }
   }
 
-  // Format numbers with thousand separators and rounding
   function formatNumberWithRounding(value: number | null, fractionDigits: number = 2): string {
     if (value === null) return 'N/A';
     return value.toLocaleString(undefined, {
