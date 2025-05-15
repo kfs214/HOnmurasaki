@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
 
+import { getInputs } from './utils';
+
 // General Rendering and Responsiveness tests
 
 test.describe('General Rendering and Responsiveness', () => {
   test('should render the app and display all initial elements', async ({ page }) => {
     await page.goto('/');
-    const priceInputs = page.getByRole('textbox', { name: 'Price' });
-    const quantityInputs = page.getByRole('textbox', { name: 'Quantity' });
-    const countInputs = page.getByRole('textbox', { name: 'Count' });
+    const { priceInputs, quantityInputs, countInputs } = getInputs(page);
     const addRowButton = page.getByRole('button', { name: 'Add Row' });
 
     await expect(priceInputs).toHaveCount(2);
