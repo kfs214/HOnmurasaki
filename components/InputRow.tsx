@@ -29,9 +29,11 @@ export function InputRow({
   onLastInputKeyPress,
   inputRef,
 }: InputRowProps) {
-  const handleInputChange = (key: keyof RowData, value: string) => {
-    const numericValue = value.replace(/[^0-9.]/g, '');
+  const handleInputChange = (key: keyof RowData, rawValue: string) => {
+    const cleanedValue = rawValue.replace(/,/g, '');
+    const numericValue = cleanedValue.replace(/[^0-9.]/g, '');
     const parsedValue = numericValue === '' ? null : parseFloat(numericValue);
+
     if (parsedValue === null || parsedValue <= 0) {
       onUpdate({ [key]: null });
     } else {
@@ -44,13 +46,10 @@ export function InputRow({
     isLastInput: boolean
   ) => {
     const { key } = event.nativeEvent;
-    if (key === 'Tab' && (event.nativeEvent as any).shiftKey) return;
-    if (key === 'Enter') {
-      if (!onLastInputKeyPress) return;
-      event.preventDefault();
-      onLastInputKeyPress();
-      Keyboard.dismiss();
-    } else if (key === 'Tab' && isLastInput) {
+    if (key === 'Tab' && (event.nativeEvent as any).shiftKey) {
+      return;
+    }
+    if (key === 'Enter' || (key === 'Tab' && isLastInput)) {
       if (!onLastInputKeyPress) return;
       event.preventDefault();
       onLastInputKeyPress();
@@ -87,7 +86,7 @@ export function InputRow({
           placeholder="Price"
           accessibilityLabel="Price"
           value={formatNumberWithoutRounding(data.price)}
-          onChangeText={(text) => handleInputChange('price', text.replace(/,/g, ''))}
+          onChangeText={(text) => handleInputChange('price', text)}
           onKeyPress={(event) => handleKeyPress(event, false)}
         />
       </View>
@@ -101,7 +100,7 @@ export function InputRow({
           placeholder="Quantity"
           accessibilityLabel="Quantity"
           value={formatNumberWithoutRounding(data.quantity)}
-          onChangeText={(text) => handleInputChange('quantity', text.replace(/,/g, ''))}
+          onChangeText={(text) => handleInputChange('quantity', text)}
           onKeyPress={(event) => handleKeyPress(event, false)}
         />
       </View>
@@ -114,7 +113,7 @@ export function InputRow({
           placeholder="1"
           accessibilityLabel="Count"
           value={formatNumberWithoutRounding(data.count)}
-          onChangeText={(text) => handleInputChange('count', text.replace(/,/g, ''))}
+          onChangeText={(text) => handleInputChange('count', text)}
           onKeyPress={(event) => handleKeyPress(event, true)}
         />
       </View>
