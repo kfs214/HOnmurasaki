@@ -1,21 +1,38 @@
 import Big from 'big.js';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Button, FlatList, Text, TextInput } from 'react-native';
 
 import { InputRow } from '@/components/InputRow';
 import { RowData } from '@/types/common';
 
-let rowIdCounter = 0;
-function generateRowId() {
-  return `row-${rowIdCounter++}`;
+const DEFAULT_ROW_DATA: Omit<RowData, 'id'> = { price: null, quantity: null, count: null };
+
+function calculateUnitPrice(row: RowData): number | null {
+  if (row.price === null || row.price <= 0) return null;
+  const price = new Big(row.price);
+  const quantity = new Big(row.quantity || 1);
+  const count = new Big(row.count || 1);
+  return price.div(quantity.times(count)).toNumber();
+}
+
+function formatNumberWithRounding(value: number | null, fractionDigits: number = 2): string {
+  if (value === null) return 'N/A';
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 export function ScreenContent() {
-  const defaultValues: Omit<RowData, 'id'> = { price: null, quantity: null, count: null };
+  const rowIdCounterRef = useRef(0);
+
+  const generateRowId = useCallback(() => {
+    return `row-${rowIdCounterRef.current++}`;
+  }, []);
 
   const [rows, setRows] = useState<RowData[]>([
-    { id: generateRowId(), ...defaultValues },
-    { id: generateRowId(), ...defaultValues },
+    { id: generateRowId(), ...DEFAULT_ROW_DATA },
+    { id: generateRowId(), ...DEFAULT_ROW_DATA },
   ]);
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
@@ -23,13 +40,13 @@ export function ScreenContent() {
   const flatListRef = useRef<FlatList<RowData>>(null);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
-  function addRow() {
+  const addRow = useCallback(() => {
     setRows((prevRows) => {
       const newIndex = prevRows.length;
       setPendingFocusIndex(newIndex);
-      return [...prevRows, { id: generateRowId(), ...defaultValues }];
+      return [...prevRows, { id: generateRowId(), ...DEFAULT_ROW_DATA }];
     });
-  }
+  }, [generateRowId]);
 
   useEffect(() => {
     if (pendingFocusIndex === null) {
@@ -41,36 +58,23 @@ export function ScreenContent() {
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
 
-  function calculateUnitPrice(row: RowData): number | null {
-    if (row.price === null || row.price <= 0) return null;
-    const price = new Big(row.price);
-    const quantity = new Big(row.quantity || 1);
-    const count = new Big(row.count || 1);
-    return price.div(quantity.times(count)).toNumber();
-  }
+  const updateRow = useCallback(
+    (id: string, updatedData: Partial<RowData>) => {
+      const updatedRows = rows.map((row) => (row.id === id ? { ...row, ...updatedData } : row));
+      setRows(updatedRows);
+      const unitPrices = updatedRows
+        .map(calculateUnitPrice)
+        .filter((price): price is number => price !== null);
 
-  function updateRow(id: string, updatedRow: Partial<RowData>) {
-    const updatedRows = rows.map((row) => (row.id === id ? { ...row, ...updatedRow } : row));
-    setRows(updatedRows);
-    const unitPrices = updatedRows
-      .map(calculateUnitPrice)
-      .filter((price): price is number => price !== null);
-
-    if (unitPrices.length > 0) {
-      const minPrice = Math.min(...unitPrices);
-      setMinPrice(minPrice);
-    } else {
-      setMinPrice(null);
-    }
-  }
-
-  function formatNumberWithRounding(value: number | null, fractionDigits: number = 2): string {
-    if (value === null) return 'N/A';
-    return value.toLocaleString(undefined, {
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    });
-  }
+      if (unitPrices.length > 0) {
+        const currentMinPrice = Math.min(...unitPrices);
+        setMinPrice(currentMinPrice);
+      } else {
+        setMinPrice(null);
+      }
+    },
+    [rows]
+  );
 
   return (
     <View className="flex-1 bg-gray-100 p-4">
@@ -84,9 +88,9 @@ export function ScreenContent() {
             <InputRow
               data={item}
               isCheapest={minPrice !== null && calculateUnitPrice(item) === minPrice}
-              onUpdate={(updatedRow) => updateRow(item.id, updatedRow)}
+              onUpdate={(updatedData) => updateRow(item.id, updatedData)}
               onLastInputKeyPress={index === rows.length - 1 ? addRow : undefined}
-              inputRef={(ref) => (inputRefs.current[index] = ref)} // Store reference to the Price input
+              inputRef={(ref) => (inputRefs.current[index] = ref)}
             />
             {/* Second Row: Unit Price */}
             <View className="mb-4 flex-row items-center">
