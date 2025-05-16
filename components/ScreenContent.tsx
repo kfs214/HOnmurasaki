@@ -1,33 +1,45 @@
 import Big from 'big.js';
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { View, Button, FlatList, Text, TextInput } from 'react-native';
 
-import { InputRow } from './InputRow';
-import { RowData } from '../types/common';
+import { InputRow } from '@/components/InputRow';
+import { RowData } from '@/types/common';
+
+let rowIdCounter = 0;
+function generateRowId() {
+  return `row-${rowIdCounter++}`;
+}
 
 export function ScreenContent() {
   const defaultValues: Omit<RowData, 'id'> = { price: null, quantity: null, count: null };
 
   const [rows, setRows] = useState<RowData[]>([
-    { id: 'initial-value-a', ...defaultValues },
-    { id: 'initial-value-b', ...defaultValues },
+    { id: generateRowId(), ...defaultValues },
+    { id: generateRowId(), ...defaultValues },
   ]);
   const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
 
   const flatListRef = useRef<FlatList<RowData>>(null);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
   function addRow() {
     setRows((prevRows) => {
-      const newRow = { id: Date.now().toString(), ...defaultValues };
-      return [...prevRows, newRow];
+      const newIndex = prevRows.length;
+      setPendingFocusIndex(newIndex);
+      return [...prevRows, { id: generateRowId(), ...defaultValues }];
     });
-
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd();
-      inputRefs.current[rows.length]?.focus();
-    }, 100);
   }
+
+  useEffect(() => {
+    if (pendingFocusIndex === null) {
+      return;
+    }
+
+    flatListRef.current?.scrollToEnd();
+    inputRefs.current[pendingFocusIndex]?.focus();
+    setPendingFocusIndex(null);
+  }, [pendingFocusIndex]);
 
   function calculateUnitPrice(row: RowData): number | null {
     if (row.price === null || row.price <= 0) return null;
@@ -87,7 +99,7 @@ export function ScreenContent() {
         )}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
-      <Button title="Add Row" onPress={addRow} accessibilityLabel="Add Row" aria-label="Add Row" />
+      <Button title="Add Row" onPress={addRow} accessibilityLabel="Add Row" />
     </View>
   );
 }

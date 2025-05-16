@@ -1,6 +1,13 @@
-import { View, TextInput, Text, Keyboard } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  Keyboard,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from 'react-native';
 
-import { RowData } from '../types/common';
+import { RowData } from '@/types/common';
 
 type InputRowProps = {
   data: RowData;
@@ -32,9 +39,12 @@ export function InputRow({
     }
   };
 
-  const handleKeyPress = (event: any, isLastInput: boolean) => {
-    const { key, shiftKey } = event.nativeEvent;
-    if (key === 'Tab' && shiftKey) return;
+  const handleKeyPress = (
+    event: NativeSyntheticEvent<TextInputKeyPressEventData>,
+    isLastInput: boolean
+  ) => {
+    const { key } = event.nativeEvent;
+    if (key === 'Tab' && (event.nativeEvent as any).shiftKey) return;
     if (key === 'Enter') {
       if (!onLastInputKeyPress) return;
       event.preventDefault();
@@ -54,7 +64,7 @@ export function InputRow({
       <View className="relative w-6">
         {isCheapest && (
           <>
-            <Text className="text-center" accessibilityLabel="Cheapest" aria-label="Cheapest">
+            <Text className="text-center" accessibilityLabel="Cheapest">
               ⭐
             </Text>
             {/* Visually hidden text for screen readers */}
@@ -76,7 +86,6 @@ export function InputRow({
           keyboardType="numeric"
           placeholder="Price"
           accessibilityLabel="Price"
-          aria-label="Price"
           value={formatNumberWithoutRounding(data.price)}
           onChangeText={(text) => handleInputChange('price', text.replace(/,/g, ''))}
           onKeyPress={(event) => handleKeyPress(event, false)}
@@ -91,7 +100,6 @@ export function InputRow({
           keyboardType="numeric"
           placeholder="Quantity"
           accessibilityLabel="Quantity"
-          aria-label="Quantity"
           value={formatNumberWithoutRounding(data.quantity)}
           onChangeText={(text) => handleInputChange('quantity', text.replace(/,/g, ''))}
           onKeyPress={(event) => handleKeyPress(event, false)}
@@ -105,7 +113,6 @@ export function InputRow({
           keyboardType="numeric"
           placeholder="1"
           accessibilityLabel="Count"
-          aria-label="Count"
           value={formatNumberWithoutRounding(data.count)}
           onChangeText={(text) => handleInputChange('count', text.replace(/,/g, ''))}
           onKeyPress={(event) => handleKeyPress(event, true)}
