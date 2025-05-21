@@ -58,13 +58,10 @@ export function ScreenContent() {
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
 
-  const updateRow = useCallback(
-    (id: string, updatedData: Partial<RowData>) => {
-      const updatedRows = rows.map((row) => (row.id === id ? { ...row, ...updatedData } : row));
-      setRows(updatedRows);
-      const unitPrices = updatedRows
-        .map(calculateUnitPrice)
-        .filter((price): price is number => price !== null);
+  const updateRow = useCallback((id: string, updatedData: Partial<RowData>) => {
+    setRows((prevRows) => {
+      const newRows = prevRows.map((row) => (row.id === id ? { ...row, ...updatedData } : row));
+      const unitPrices = newRows.map(calculateUnitPrice).filter((price) => price !== null);
 
       if (unitPrices.length > 0) {
         const currentMinPrice = Math.min(...unitPrices);
@@ -72,9 +69,9 @@ export function ScreenContent() {
       } else {
         setMinPrice(null);
       }
-    },
-    [rows]
-  );
+      return newRows;
+    });
+  }, []);
 
   return (
     <View className="flex-1 bg-gray-100 p-4">
