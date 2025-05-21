@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import {
   View,
   TextInput,
@@ -5,6 +6,7 @@ import {
   Keyboard,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
+  TextInputProps,
 } from 'react-native';
 
 import { RowData } from '@/types/common';
@@ -22,6 +24,22 @@ function formatNumberWithoutRounding(value: number | null): string {
   return value.toLocaleString();
 }
 
+const NumericInput = forwardRef<TextInput, { rawValue: number | null } & TextInputProps>(
+  ({ rawValue, ...restProps }, ref) => {
+    return (
+      <View className="flex-1 flex-row items-center border border-gray-300 p-2">
+        <TextInput
+          ref={ref}
+          className="min-w-0 flex-1 text-center"
+          keyboardType="numeric"
+          value={formatNumberWithoutRounding(rawValue)}
+          {...restProps}
+        />
+      </View>
+    );
+  }
+);
+
 export function InputRow({
   data,
   isCheapest,
@@ -29,7 +47,7 @@ export function InputRow({
   onLastInputKeyPress,
   inputRef,
 }: InputRowProps) {
-  const handleInputChange = (key: keyof RowData, rawValue: string) => {
+  function handleInputChange(key: keyof RowData, rawValue: string) {
     const cleanedValue = rawValue.replace(/,/g, '');
     const numericValue = cleanedValue.replace(/[^0-9.]/g, '');
     const parsedValue = numericValue === '' ? null : parseFloat(numericValue);
@@ -39,12 +57,12 @@ export function InputRow({
     } else {
       onUpdate({ [key]: parsedValue });
     }
-  };
+  }
 
-  const handleKeyPress = (
+  function handleKeyPress(
     event: NativeSyntheticEvent<TextInputKeyPressEventData>,
     isLastInput: boolean
-  ) => {
+  ) {
     const { key } = event.nativeEvent;
     if (key === 'Tab' && (event.nativeEvent as any).shiftKey) {
       return;
@@ -53,9 +71,8 @@ export function InputRow({
       if (!onLastInputKeyPress) return;
       event.preventDefault();
       onLastInputKeyPress();
-      Keyboard.dismiss();
     }
-  };
+  }
 
   return (
     <View className="mb-2 flex-row items-center" testID="input-row">
@@ -78,45 +95,36 @@ export function InputRow({
         )}
       </View>
       {/* Price Input */}
-      <View className="flex-1 flex-row items-center border border-gray-300 p-2">
-        <TextInput
-          ref={inputRef}
-          className="min-w-0 flex-1 text-center"
-          keyboardType="numeric"
-          placeholder="Price"
-          accessibilityLabel="Price"
-          value={formatNumberWithoutRounding(data.price)}
-          onChangeText={(text) => handleInputChange('price', text)}
-          onKeyPress={(event) => handleKeyPress(event, false)}
-        />
-      </View>
+
+      <NumericInput
+        ref={inputRef}
+        rawValue={data.price}
+        onChangeText={(text) => handleInputChange('price', text)}
+        onKeyPress={(event) => handleKeyPress(event, false)}
+        placeholder="Price"
+        accessibilityLabel="Price"
+      />
       <Text className="mx-1 text-3xl text-gray-500">÷</Text>
       <Text className="text-xl text-gray-500">(</Text>
       {/* Quantity Input */}
-      <View className="flex-1 flex-row items-center border border-gray-300 p-2">
-        <TextInput
-          className="min-w-0 flex-1 text-center"
-          keyboardType="numeric"
-          placeholder="Quantity"
-          accessibilityLabel="Quantity"
-          value={formatNumberWithoutRounding(data.quantity)}
-          onChangeText={(text) => handleInputChange('quantity', text)}
-          onKeyPress={(event) => handleKeyPress(event, false)}
-        />
-      </View>
+
+      <NumericInput
+        rawValue={data.quantity}
+        onChangeText={(text) => handleInputChange('quantity', text)}
+        onKeyPress={(event) => handleKeyPress(event, false)}
+        placeholder="Quantity"
+        accessibilityLabel="Quantity"
+      />
       <Text className="mx-1 text-3xl text-gray-500">×</Text>
       {/* Count Input */}
-      <View className="flex-1 flex-row items-center border border-gray-300 p-2">
-        <TextInput
-          className="min-w-0 flex-1 text-center"
-          keyboardType="numeric"
-          placeholder="1"
-          accessibilityLabel="Count"
-          value={formatNumberWithoutRounding(data.count)}
-          onChangeText={(text) => handleInputChange('count', text)}
-          onKeyPress={(event) => handleKeyPress(event, true)}
-        />
-      </View>
+
+      <NumericInput
+        rawValue={data.count}
+        onChangeText={(text) => handleInputChange('count', text)}
+        onKeyPress={(event) => handleKeyPress(event, true)}
+        placeholder="1"
+        accessibilityLabel="Count"
+      />
       <Text className="text-xl text-gray-500">)</Text>
     </View>
   );
