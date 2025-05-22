@@ -79,25 +79,28 @@ export function ScreenContent() {
         ref={flatListRef}
         data={rows}
         keyExtractor={(item) => item.id}
-        renderItem={({ item, index }) => (
-          <View>
-            {/* First Row: InputRow */}
-            <InputRow
-              data={item}
-              isCheapest={minPrice !== null && calculateUnitPrice(item) === minPrice}
-              onUpdate={(updatedData) => updateRow(item.id, updatedData)}
-              onLastInputKeyPress={index === rows.length - 1 ? addRow : undefined}
-              inputRef={(ref) => (inputRefs.current[index] = ref)}
-            />
-            {/* Second Row: Unit Price */}
-            <View className="mb-4 flex-row items-center">
-              <View className="w-6" />
-              <Text className="flex-1 text-center text-gray-700">
-                Unit Price: {formatNumberWithRounding(calculateUnitPrice(item))}
-              </Text>
+        renderItem={({ item, index }) => {
+          const unitPrice = calculateUnitPrice(item);
+          return (
+            <View>
+              {/* First Row: InputRow */}
+              <InputRow
+                data={item}
+                isCheapest={minPrice !== null && unitPrice === minPrice}
+                onUpdate={(updatedData) => updateRow(item.id, updatedData)}
+                onLastInputKeyPress={index === rows.length - 1 ? addRow : undefined}
+                inputRef={(ref) => (inputRefs.current[index] = ref)}
+              />
+              {/* Second Row: Unit Price */}
+              <View className="mb-4 flex-row items-center">
+                <View className="w-6" />
+                <Text className="flex-1 text-center text-gray-700">
+                  Unit Price: {formatNumberWithRounding(unitPrice)}
+                </Text>
+              </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
       <Button title="Add Row" onPress={addRow} accessibilityLabel="Add Row" />
