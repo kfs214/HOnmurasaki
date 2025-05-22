@@ -48,8 +48,8 @@ export function InputRow({
   inputRef,
 }: InputRowProps) {
   function handleInputChange(key: keyof RowData, rawValue: string) {
-    const cleanedValue = rawValue.replace(/,/g, '');
-    const numericValue = cleanedValue.replace(/[^0-9.]/g, '');
+    // NOTE: This implementation does not handle edge cases with multiple dots (e.g., '12...3.4' should be '12.34')
+    const numericValue = rawValue.replace(/,/g, '').replace(/[^0-9.]/g, '');
     const parsedValue = numericValue === '' ? null : parseFloat(numericValue);
 
     if (parsedValue === null || parsedValue <= 0) {
