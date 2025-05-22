@@ -49,7 +49,7 @@ export function InputRow({
 }: InputRowProps) {
   function handleInputChange(key: keyof RowData, rawValue: string) {
     const cleanedValue = rawValue.replace(/,/g, '');
-    const numericValue = cleanedValue.replace(/[^0-9]|(?<=\..*)\./g, '');
+    const numericValue = cleanedValue.replace(/[^0-9.]/g, '');
     const parsedValue = numericValue === '' ? null : parseFloat(numericValue);
 
     if (parsedValue === null || parsedValue <= 0) {
