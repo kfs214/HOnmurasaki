@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-import { getInputs } from './utils';
+import { getInputs, addRow } from './utils';
 
 test.describe('Accessibility and Keyboard Navigation', () => {
   test('adds a new row when pressing Enter on any input of the last row', async ({ page }) => {
@@ -67,13 +67,6 @@ test.describe('Accessibility and Keyboard Navigation', () => {
     await expect(priceInputs).toHaveCount(2); // Still just 2 rows
   });
 
-  test('handles a large number of rows without performance issues', async ({ page }) => {
-    await page.goto('/');
-    await Promise.all(Array.from({ length: 50 }).map(() => page.click('text=Add Row')));
-    const { priceInputs } = getInputs(page);
-    await expect(priceInputs).toHaveCount(52); // 2 initial rows + 50 added rows
-  });
-
   test('ensures all interactive elements are accessible', async ({ page }) => {
     await page.goto('/');
     const addRowButton = page.getByRole('button', { name: 'Add Row' });
@@ -91,7 +84,7 @@ test.describe('Accessibility and Keyboard Navigation', () => {
   }) => {
     await page.goto('/');
     const { priceInputs, quantityInputs, countInputs } = getInputs(page);
-    await page.click('text=Add Row');
+    await addRow(page);
     await expect(priceInputs).toHaveCount(3);
 
     // Enter on Price input of the first row (not the last row)

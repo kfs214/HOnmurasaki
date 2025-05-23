@@ -1,12 +1,9 @@
 import { test, expect, Page } from '@playwright/test';
 
-import { getInputs } from './utils';
+import { getInputs, addRow } from './utils';
 
 const getUnitPrices = (page: Page) => page.locator('text=Unit Price:');
 const getInputRows = (page: Page) => page.getByTestId('input-row');
-const addRow = async (page: Page, times = 1) => {
-  for (let i = 0; i < times; i++) await page.click('text=Add Row');
-};
 
 test.describe('Row Management and Calculations', () => {
   test('adds a new row when "Add Row" is clicked', async ({ page }) => {
@@ -121,10 +118,10 @@ test.describe('Row Management and Calculations', () => {
     const { priceInputs } = getInputs(page);
     await expect(priceInputs).toHaveCount(2);
     await Promise.all(
-      Array(5)
+      Array(50)
         .fill(0)
         .map(() => page.click('text=Add Row'))
     );
-    await expect(priceInputs).toHaveCount(7);
+    await expect(priceInputs).toHaveCount(52);
   });
 });

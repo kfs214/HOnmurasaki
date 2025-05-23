@@ -7,3 +7,7 @@ export function getInputs(page: Page) {
     countInputs: page.getByRole('textbox', { name: 'Count' }),
   };
 }
+
+export const addRow = async (page: Page, times = 1) => {
+  for (let i = 0; i < times; i++) await page.click('text=Add Row');
+};
