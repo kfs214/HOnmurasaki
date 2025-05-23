@@ -2,7 +2,7 @@
 
 [WIP]
 
-This project is a mobile and web application built with Expo, React Native, TypeScript, and NativeWind (for Tailwind CSS). It aims to provide a [**Please add a brief description of your app's purpose here, e.g., "a tool for X", "a platform for Y"**].
+Unit price calculator for quickly comparing prices of items with different quantities and counts. Cross-platform app built with Expo, React Native, TypeScript, and NativeWind.
 
 ## ✨ Features
 
