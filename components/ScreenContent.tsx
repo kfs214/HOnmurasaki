@@ -26,9 +26,9 @@ function formatNumberWithRounding(value: number | null, fractionDigits: number =
 export function ScreenContent() {
   const rowIdCounterRef = useRef(0);
 
-  const generateRowId = useCallback(() => {
+  function generateRowId() {
     return `row-${rowIdCounterRef.current++}`;
-  }, []);
+  }
 
   const [rows, setRows] = useState<RowData[]>([
     { id: generateRowId(), ...DEFAULT_ROW_DATA },
@@ -40,13 +40,13 @@ export function ScreenContent() {
   const flatListRef = useRef<FlatList<RowData>>(null);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
-  const addRow = useCallback(() => {
+  function addRow() {
     setRows((prevRows) => {
       const newIndex = prevRows.length;
       setPendingFocusIndex(newIndex);
       return [...prevRows, { id: generateRowId(), ...DEFAULT_ROW_DATA }];
     });
-  }, [generateRowId]);
+  }
 
   useEffect(() => {
     if (pendingFocusIndex === null) {
@@ -58,7 +58,7 @@ export function ScreenContent() {
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
 
-  const updateRow = useCallback((id: string, updatedData: Partial<RowData>) => {
+  function updateRow(id: string, updatedData: Partial<RowData>) {
     setRows((prevRows) => {
       const newRows = prevRows.map((row) => (row.id === id ? { ...row, ...updatedData } : row));
       const unitPrices = newRows.map(calculateUnitPrice).filter((price) => price !== null);
@@ -71,7 +71,7 @@ export function ScreenContent() {
       }
       return newRows;
     });
-  }, []);
+  }
 
   return (
     <View className="flex-1 bg-gray-100 p-4">
