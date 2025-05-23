@@ -79,21 +79,3 @@ test.describe('Input Field Validations', () => {
     });
   });
 });
-
-test.describe('Input Field Placeholders and Initial Values', () => {
-  test('have correct placeholders and initial values', async ({ page }) => {
-    await page.goto('/');
-
-    const priceInput = page.getByRole('textbox', { name: 'Price' }).first();
-    const quantityInput = page.getByRole('textbox', { name: 'Quantity' }).first();
-    const countInput = page.getByRole('textbox', { name: 'Count' }).first();
-
-    await expect(priceInput).toHaveAttribute('placeholder', 'Price');
-    await expect(quantityInput).toHaveAttribute('placeholder', 'Quantity');
-    await expect(countInput).toHaveAttribute('placeholder', '1');
-
-    await expect(priceInput).toHaveValue('');
-    await expect(quantityInput).toHaveValue('');
-    await expect(countInput).toHaveValue('');
-  });
-});

@@ -16,6 +16,24 @@ test.describe('General Rendering and Responsiveness', () => {
     await expect(addRowButton).toBeVisible();
   });
 
+  test('have correct placeholders and initial values', async ({ page }) => {
+    await page.goto('/');
+
+    const { priceInputs, quantityInputs, countInputs } = getInputs(page);
+
+    const priceInput = priceInputs.first();
+    const quantityInput = quantityInputs.first();
+    const countInput = countInputs.first();
+
+    await expect(priceInput).toHaveAttribute('placeholder', 'Price');
+    await expect(quantityInput).toHaveAttribute('placeholder', 'Quantity');
+    await expect(countInput).toHaveAttribute('placeholder', '1');
+
+    await expect(priceInput).toHaveValue('');
+    await expect(quantityInput).toHaveValue('');
+    await expect(countInput).toHaveValue('');
+  });
+
   test('should adjust layout correctly for different screen sizes', async ({ page }) => {
     await page.goto('/');
     await page.setViewportSize({ width: 375, height: 812 }); // Mobile
