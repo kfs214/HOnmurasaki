@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { View, Button, FlatList, Text, TextInput } from 'react-native';
 
 import { InputRow } from '@/components/InputRow';

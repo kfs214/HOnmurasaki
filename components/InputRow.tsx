@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   Text,
-  Keyboard,
   NativeSyntheticEvent,
   TextInputKeyPressEventData,
   TextInputProps,
@@ -95,7 +94,6 @@ export function InputRow({
         )}
       </View>
       {/* Price Input */}
-
       <NumericInput
         ref={inputRef}
         rawValue={data.price}
@@ -107,7 +105,6 @@ export function InputRow({
       <Text className="mx-1 text-3xl text-gray-500">÷</Text>
       <Text className="text-xl text-gray-500">(</Text>
       {/* Quantity Input */}
-
       <NumericInput
         rawValue={data.quantity}
         onChangeText={(text) => handleInputChange('quantity', text)}
@@ -117,7 +114,6 @@ export function InputRow({
       />
       <Text className="mx-1 text-3xl text-gray-500">×</Text>
       {/* Count Input */}
-
       <NumericInput
         rawValue={data.count}
         onChangeText={(text) => handleInputChange('count', text)}
