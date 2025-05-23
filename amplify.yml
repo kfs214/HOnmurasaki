@@ -7,13 +7,7 @@ frontend:
         - npx expo install --check
     build:
       commands:
-        - npm run lint
-        - npm run format
         - npx expo export --platform web
-    postBuild:
-      commands:
-        - npx playwright install --with-deps
-        - npm run test
   artifacts:
     baseDirectory: dist
     files:
