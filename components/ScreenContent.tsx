@@ -40,14 +40,6 @@ export function ScreenContent() {
   const flatListRef = useRef<FlatList<RowData>>(null);
   const inputRefs = useRef<(TextInput | null)[]>([]);
 
-  function addRow() {
-    setRows((prevRows) => {
-      const newIndex = prevRows.length;
-      setPendingFocusIndex(newIndex);
-      return [...prevRows, { id: generateRowId(), ...DEFAULT_ROW_DATA }];
-    });
-  }
-
   useEffect(() => {
     if (pendingFocusIndex === null) {
       return;
@@ -57,6 +49,14 @@ export function ScreenContent() {
     inputRefs.current[pendingFocusIndex]?.focus();
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
+
+  function addRow() {
+    setRows((prevRows) => {
+      const newIndex = prevRows.length;
+      setPendingFocusIndex(newIndex);
+      return [...prevRows, { id: generateRowId(), ...DEFAULT_ROW_DATA }];
+    });
+  }
 
   function updateRow(id: string, updatedData: Partial<RowData>) {
     setRows((prevRows) => {
