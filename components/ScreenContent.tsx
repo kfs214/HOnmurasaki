@@ -7,28 +7,28 @@ import { RowData } from '@/types/common';
 
 const DEFAULT_ROW_DATA: Omit<RowData, 'id'> = { price: null, quantity: null, count: null };
 
-function calculateUnitPrice(row: RowData): number | null {
+const calculateUnitPrice = (row: RowData): number | null => {
   if (row.price === null || row.price <= 0) return null;
   const price = new Big(row.price);
   const quantity = new Big(row.quantity || 1);
   const count = new Big(row.count || 1);
   return price.div(quantity.times(count)).toNumber();
-}
+};
 
-function formatNumberWithRounding(value: number | null, fractionDigits: number = 2): string {
+const formatNumberWithRounding = (value: number | null, fractionDigits: number = 2): string => {
   if (value === null) return 'N/A';
   return value.toLocaleString(undefined, {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
-}
+};
 
-export function ScreenContent() {
+const ScreenContent = () => {
   const rowIdCounterRef = useRef(0);
 
-  function generateRowId() {
+  const generateRowId = () => {
     return `row-${rowIdCounterRef.current++}`;
-  }
+  };
 
   const [rows, setRows] = useState<RowData[]>([
     { id: generateRowId(), ...DEFAULT_ROW_DATA },
@@ -50,15 +50,15 @@ export function ScreenContent() {
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
 
-  function addRow() {
+  const addRow = () => {
     setRows((prevRows) => {
       const newIndex = prevRows.length;
       setPendingFocusIndex(newIndex);
       return [...prevRows, { id: generateRowId(), ...DEFAULT_ROW_DATA }];
     });
-  }
+  };
 
-  function updateRow(id: string, updatedData: Partial<RowData>) {
+  const updateRow = (id: string, updatedData: Partial<RowData>) => {
     setRows((prevRows) => {
       const newRows = prevRows.map((row) => (row.id === id ? { ...row, ...updatedData } : row));
       const unitPrices = newRows.map(calculateUnitPrice).filter((price) => price !== null);
@@ -71,7 +71,7 @@ export function ScreenContent() {
       }
       return newRows;
     });
-  }
+  };
 
   return (
     <View className="flex-1 bg-gray-100 p-4">
@@ -106,4 +106,6 @@ export function ScreenContent() {
       <Button title="Add Row" onPress={addRow} accessibilityLabel="Add Row" />
     </View>
   );
-}
+};
+
+export { ScreenContent };

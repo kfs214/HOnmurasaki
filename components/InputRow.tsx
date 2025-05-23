@@ -18,10 +18,10 @@ type InputRowProps = {
   inputRef?: (ref: TextInput | null) => void;
 };
 
-function formatNumberWithoutRounding(value: number | null): string {
+const formatNumberWithoutRounding = (value: number | null): string => {
   if (value === null) return '';
   return value.toLocaleString();
-}
+};
 
 const NumericInput = forwardRef<TextInput, { rawValue: number | null } & TextInputProps>(
   ({ rawValue, ...restProps }, ref) => {
@@ -39,14 +39,8 @@ const NumericInput = forwardRef<TextInput, { rawValue: number | null } & TextInp
   }
 );
 
-export function InputRow({
-  data,
-  isCheapest,
-  onUpdate,
-  onLastInputKeyPress,
-  inputRef,
-}: InputRowProps) {
-  function handleInputChange(key: keyof RowData, rawValue: string) {
+const InputRow = ({ data, isCheapest, onUpdate, onLastInputKeyPress, inputRef }: InputRowProps) => {
+  const handleInputChange = (key: keyof RowData, rawValue: string) => {
     // NOTE: This implementation does not handle edge cases with multiple dots (e.g., '12...3.4' should be '12.34')
     const numericValue = rawValue.replace(/,/g, '').replace(/[^0-9.]/g, '');
     const parsedValue = numericValue === '' ? null : parseFloat(numericValue);
@@ -56,12 +50,12 @@ export function InputRow({
     } else {
       onUpdate({ [key]: parsedValue });
     }
-  }
+  };
 
-  function handleKeyPress(
+  const handleKeyPress = (
     event: NativeSyntheticEvent<TextInputKeyPressEventData>,
     isLastInput: boolean
-  ) {
+  ) => {
     const { key } = event.nativeEvent;
     if (key === 'Tab' && (event.nativeEvent as any).shiftKey) {
       return;
@@ -71,7 +65,7 @@ export function InputRow({
       event.preventDefault();
       onLastInputKeyPress();
     }
-  }
+  };
 
   return (
     <View className="mb-2 flex-row items-center" testID="input-row">
@@ -124,4 +118,6 @@ export function InputRow({
       <Text className="text-xl text-gray-500">)</Text>
     </View>
   );
-}
+};
+
+export { InputRow };

@@ -1,6 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 
-async function assertInput({
+const assertInput = async ({
   page,
   inputName,
   filledValue,
@@ -10,11 +10,11 @@ async function assertInput({
   inputName: string;
   filledValue: string;
   expectedValue: string;
-}) {
+}) => {
   const input = page.getByRole('textbox', { name: inputName }).first();
   await input.fill(filledValue);
   await expect(input).toHaveValue(expectedValue);
-}
+};
 
 test.describe('Input Field Validations', () => {
   test.describe('Price Input', () => {

@@ -5,7 +5,7 @@ import { ScreenContent } from '@/components/ScreenContent';
 
 import './global.css';
 
-export default function App() {
+const App = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1">
@@ -17,4 +17,6 @@ export default function App() {
       </SafeAreaView>
     </SafeAreaProvider>
   );
-}
+};
+
+export default App;
