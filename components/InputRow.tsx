@@ -29,7 +29,7 @@ const NumericInput = forwardRef<TextInput, { rawValue: number | null } & TextInp
       <View className="flex-1 flex-row items-center border border-gray-300 p-2">
         <TextInput
           ref={ref}
-          className="min-w-0 flex-1 text-center"
+          className="min-w-0 flex-1 text-center text-base"
           keyboardType="numeric"
           value={formatNumberWithoutRounding(rawValue)}
           {...restProps}
