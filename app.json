@@ -5,7 +5,11 @@
     "version": "1.0.0",
 
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png",
+      "meta": {
+        "apple-mobile-web-app-capable": "yes",
+        "apple-touch-icon": "./assets/apple-touch-icon.png"
+      }
     },
 
     "experiments": {
